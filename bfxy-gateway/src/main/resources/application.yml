@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: bfxy-gateway
+zuul:
+  sensitive-headers:
+  routes:
+    order:
+      path: /order/**
+      serviceId: order
+    product:
+      path: /product/**
+      serviceId: product
+    paya:
+      path: /paya/**
+      serviceId: paya
+    payb:
+      path: /payb/**
+      serviceId: payb
+    pkg:
+      path: /pkg/**
+      serviceId: pkg
+eureka:
+  client:
+    service-url:
+     defaultZone: http://localhost:8761/eureka/
+  instance:
+      prefer-ip-address: true
+management:
+  security:
+    enabled: false
+ribbon:
+  ReadTimeout: 8000
+  ConnectTimeout: 8000

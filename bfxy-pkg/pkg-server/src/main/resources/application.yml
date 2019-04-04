@@ -1,0 +1,44 @@
+
+#druid数据库连接池配置
+spring:
+  datasource:
+    name: tjtt
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/bfxy?allowMultiQueries=true&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: w921211d
+    maxActive: 20
+    minIdle: 5
+    initialSize: 10
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 10
+    testWhileIdle: true
+    validationQuery: SELECT 1 FROM DUAL
+    testOnBorrow: false
+    testOnReturn: false
+    filters: stat,wall,lombok
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+  application:
+      name: pkg
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+
+# 分页配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+server:
+  port: 9005
