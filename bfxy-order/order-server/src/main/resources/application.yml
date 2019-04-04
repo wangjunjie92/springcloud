@@ -24,6 +24,7 @@ spring:
   application:
       name: order
 
+
 eureka:
   client:
     service-url:
