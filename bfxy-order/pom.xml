@@ -33,6 +33,8 @@
         <product-client.version>0.0.1-SNAPSHOT</product-client.version>
         <order-common.version>0.0.1-SNAPSHOT</order-common.version>
         <bfxy-common.version>0.0.1-SNAPSHOT</bfxy-common.version>
+        <sharding-jdbc-version>3.0.0</sharding-jdbc-version>
+        <jasypt-spring-boot-version>1.14</jasypt-spring-boot-version>
     </properties>
 
     <dependencyManagement>
@@ -54,11 +56,20 @@
                 <artifactId>bfxy-common</artifactId>
                 <version>${bfxy-common.version}</version>
             </dependency>
-           <!-- <dependency>
-                <groupId>com.imooc</groupId>
-                <artifactId>order-common</artifactId>
-                <version>${order-common.version}</version>
-            </dependency>-->
+
+            <!-- sharding-sphere -->
+            <dependency>
+                <groupId>io.shardingsphere</groupId>
+                <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+                <version>${sharding-jdbc-version}</version>
+            </dependency>
+
+            <!-- 集成数据库密码加密工具jasypt  jdk8版本-->
+            <dependency>
+                <groupId>com.github.ulisesbocchio</groupId>
+                <artifactId>jasypt-spring-boot-starter</artifactId>
+                <version>${jasypt-spring-boot-version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

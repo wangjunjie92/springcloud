@@ -23,7 +23,11 @@ spring:
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
   application:
       name: order
-
+ redis:
+    host: 39.106.193.32
+    port: 6379
+    password: 921210
+    database: 2
 
 eureka:
   client:

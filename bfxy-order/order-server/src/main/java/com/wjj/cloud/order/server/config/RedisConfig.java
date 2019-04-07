@@ -18,8 +18,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @Modified By: xxx 2018/8/17 10:19
  */
 
-//@Configuration
-//@EnableCaching
+@Configuration
+@EnableCaching
 public class RedisConfig {
 
 
