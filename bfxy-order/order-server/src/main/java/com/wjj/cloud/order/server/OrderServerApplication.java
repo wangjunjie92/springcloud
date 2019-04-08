@@ -1,8 +1,10 @@
 package com.wjj.cloud.order.server;
 
 import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
+import com.wjj.cloud.order.server.common.properties.OrderProperties;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
@@ -16,6 +18,7 @@ import org.springframework.context.annotation.ComponentScan;
 @MapperScan("com.wjj.cloud.order.server.dao")
 @ComponentScan("com.wjj.cloud")
 @EnableCircuitBreaker
+@EnableConfigurationProperties(OrderProperties.class)
 public class OrderServerApplication {
 
     public static void main(String[] args) {

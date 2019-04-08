@@ -1,5 +1,6 @@
 package com.wjj.cloud.order.server.service.producer;
 
+import com.wjj.cloud.order.server.common.properties.OrderProperties;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
@@ -7,6 +8,8 @@ import org.apache.rocketmq.client.producer.MessageQueueSelector;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageQueue;
 import org.apache.rocketmq.remoting.exception.RemotingException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,17 +22,17 @@ import java.util.List;
  */
 
 @Component
-public class OrderlyProducer {
+public class OrderlyProducer implements InitializingBean {
 
     private DefaultMQProducer producer;
-    public static final String NAMESERVER = "39.106.193.32:9876";
     public static final String PRODUCER_GROUP_NAME = "cloud_orderly_group";
+
+    @Autowired
+    private OrderProperties properties;
 
     private OrderlyProducer() {
         this.producer = new DefaultMQProducer(PRODUCER_GROUP_NAME);
-        this.producer.setNamesrvAddr(NAMESERVER);
         this.producer.setSendMsgTimeout(3000);
-        this.start();
     }
 
     public void start() {
@@ -68,5 +71,13 @@ public class OrderlyProducer {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        String nameServer = properties.getRocketMQ().getAddress();
+        this.producer.setNamesrvAddr(nameServer);
+        this.start();
+
     }
 }

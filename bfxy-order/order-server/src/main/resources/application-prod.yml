@@ -1,0 +1,69 @@
+
+#druid数据库连接池配置
+spring:
+  application:
+      name: order
+  redis:
+    host: 39.106.193.32
+    port: 6379
+    password: 921210
+    database: 2
+  profiles:
+    include: prod-db-config
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+# 分页配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+server:
+  port: 9001
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 8000
+      circuitBreaker:
+        enabled: true
+        requestVolumeThreshold: 10
+        sleepWindowInMilliseconds: 20000
+        errorThresholdPercentage: 60
+    ProductStoreClient:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 8000
+      circuitBreaker:
+        enabled: true
+        requestVolumeThreshold: 10
+        sleepWindowInMilliseconds: 20000
+        errorThresholdPercentage: 60
+bfxy:
+  order:
+    rocketMQ:
+      address: 39.106.193.32:9876
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 8000
+        readTimeout: 8000
+        loggerLevel: basic
+  hystrix:
+    enabled: true
+
+
+

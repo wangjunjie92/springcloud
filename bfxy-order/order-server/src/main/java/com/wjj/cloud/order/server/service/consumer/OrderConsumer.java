@@ -1,6 +1,7 @@
 package com.wjj.cloud.order.server.service.consumer;
 
 import com.wjj.cloud.order.server.common.constants.OrderStatus;
+import com.wjj.cloud.order.server.common.properties.OrderProperties;
 import com.wjj.cloud.order.server.dao.OrderMapper;
 import com.wjj.cloud.order.server.service.OrderService;
 import com.wjj.cloud.order.server.util.GsonUtil;
@@ -12,6 +13,7 @@ import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageConst;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +29,10 @@ import java.util.Map;
  */
 
 @Component
-public class OrderConsumer {
+public class OrderConsumer implements InitializingBean {
+
+    @Autowired
+    private OrderProperties orderProperties;
 
     private DefaultMQPushConsumer consumer;
 
@@ -35,12 +40,17 @@ public class OrderConsumer {
 
     public static final String CALLBACK_PAY_TAGS = "cloud_callback_pay";
 
-    public static final String NAMESERVER = "39.106.193.32:9876";
-
     @Autowired
     private OrderMapper orderMapper;
     @Autowired
     private OrderService orderService;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        String nameServer = orderProperties.getRocketMQ().getAddress();
+        consumer.setNamesrvAddr(nameServer);
+        consumer.start();
+    }
 
     class MessageListenerConcurrently4Pay implements MessageListenerConcurrently {
 
@@ -84,11 +94,9 @@ public class OrderConsumer {
             consumer = new DefaultMQPushConsumer(CALLBACK_PAY_TOPIC);
             consumer.setConsumeThreadMax(10);
             consumer.setConsumeThreadMax(30);
-            consumer.setNamesrvAddr(NAMESERVER);
             consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_LAST_OFFSET);
             consumer.subscribe(CALLBACK_PAY_TOPIC, CALLBACK_PAY_TAGS);
             consumer.registerMessageListener(new MessageListenerConcurrently4Pay());
-            consumer.start();
         }catch (MQClientException e) {
             e.printStackTrace();
         }

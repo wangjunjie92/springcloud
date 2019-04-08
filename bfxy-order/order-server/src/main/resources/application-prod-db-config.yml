@@ -1,0 +1,62 @@
+
+initialSize: 5
+minIdle: 5
+maxIdle: 100
+maxActive: 20
+maxWait: 60000
+timeBetweenEvictionRunsMillis: 60000
+minEvictableIdleTimeMillis: 300000
+
+#打印sql日志
+sharding:
+  jdbc:
+    config:
+      sharding:
+        props:
+          sql:
+            show: true
+        defaultDataSourceName: ds0
+        tables:
+          t_order:
+            actualDataNodes: ds$->{0..1}.t_order_000$->{0..1}
+            database-strategy:
+              complex:
+                shardingColumns: user_id,order_id
+                algorithmClassName: com.wjj.cloud.order.server.common.strategy.SnoWalkerComplexShardingDB
+            tableStrategy:
+              complex:
+                shardingColumns: user_id,order_id
+                algorithmClassName: com.wjj.cloud.order.server.common.strategy.SnoWalkerComplexShardingTB
+    datasource:
+      names: ds0,ds1
+      ds0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/bfxy_db0?allowMultiQueries=true&useUnicode=true&characterEncoding=utf8
+        username: root
+        password: ENC(RAXUtrmhmVPe3WjCPUKO4Z7xIOjtSrWL)
+        initialSize: ${initialSize}
+        minIdle: ${minIdle}
+        maxActive: ${maxActive}
+        maxWait: ${maxWait}
+        validationQuery: SELECT 1 FROM DUAL
+        timeBetweenEvictionRunsMillis: ${timeBetweenEvictionRunsMillis}
+        minEvictableIdleTimeMillis: ${minEvictableIdleTimeMillis}
+      ds1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/bfxy_db1?allowMultiQueries=true&useUnicode=true&characterEncoding=utf8
+        username: root
+        password: ENC(RAXUtrmhmVPe3WjCPUKO4Z7xIOjtSrWL)
+        initialSize: ${initialSize}
+        minIdle: ${minIdle}
+        maxActive: ${maxActive}
+        maxWait: ${maxWait}
+        validationQuery: SELECT 1 FROM DUAL
+        timeBetweenEvictionRunsMillis: ${timeBetweenEvictionRunsMillis}
+        minEvictableIdleTimeMillis: ${minEvictableIdleTimeMillis}
+jasypt:
+  encryptor:
+    password: wjj
+
+
