@@ -1,0 +1,66 @@
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          lower-case-service-id: true
+          enabled: true
+      routes:
+        - id: product
+          uri: lb://product
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - StripPrefix=2
+            - name: Hystrix
+              args:
+                name: default
+                fallbackUri: 'forward:/defaultfallback'
+        - id: order
+          uri: lb://order
+          predicates:
+            - Path=/api/order/**
+          filters:
+            - StripPrefix=2
+            - name: Hystrix
+              args:
+                name: default
+                fallbackUri: 'forward:/defaultfallback'
+        - id: paya
+          uri: lb://paya
+          predicates:
+            - Path=/api/paya/**
+          filters:
+            - StripPrefix=2
+            - name: Hystrix
+              args:
+                name: default
+                fallbackUri: 'forward:/defaultfallback'
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 8000
+#    productHystrix:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 3000
+#      circuitBreaker:
+#        enabled: true
+#        requestVolumeThreshold: 10
+#        sleepWindowInMilliseconds: 20000
+#        errorThresholdPercentage: 60
+
+eureka:
+  client:
+    service-url:
+     defaultZone: http://localhost:8761/eureka/
+  instance:
+      prefer-ip-address: true
