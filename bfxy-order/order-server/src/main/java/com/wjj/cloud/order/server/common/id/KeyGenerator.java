@@ -28,8 +28,8 @@ import java.util.UUID;
 public class KeyGenerator {
 
     @Autowired
-    @Qualifier("redisIdUtil")
-    private IdUtil idUtil;
+    @Qualifier("redisSequenceGenerator")
+    private SequenceGenerator sequenceGenerator;
 
     /**默认集群机器总数*/
     private static final int DEFAULT_HOST_NUM = 64;
@@ -61,7 +61,7 @@ public class KeyGenerator {
         /** 6.id分布式机器位 2位*/
         String distributedIndex = getDistributedId(2);
         /** 7.随机数位*/
-        String sequenceId = idUtil.getOrderId(targetEnum, Integer.parseInt(dbIndex), Integer.parseInt(tbIndex));
+        String sequenceId = sequenceGenerator.getOrderId(targetEnum, Integer.parseInt(dbIndex), Integer.parseInt(tbIndex));
         /** 库表索引靠前*/
         return key.append(idPrefix)
                 .append(dbIndex)

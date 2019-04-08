@@ -41,9 +41,6 @@ public class SnoWalkerComplexShardingTB implements ComplexKeysShardingAlgorithm 
 
             //根据列名获取索引规则，得到索引值
             String index = getIndex(listShardingValue.getLogicTableName(),listShardingValue.getColumnName(),shardingValue.get(0));
-            if (StringUtils.isBlank(index)) {
-                continue;
-            }
             //循环匹配数据表源
             for (String availableTargetName : availableTargetNames){
                 if (availableTargetName.endsWith("_"+index)) {
@@ -78,6 +75,10 @@ public class SnoWalkerComplexShardingTB implements ComplexKeysShardingAlgorithm 
                 //目标表的目标主键路由-例如：根据订单id查询订单信息
                 if (targetEnum.getShardingKey().equals(columnName)) {
                     index = getTbIndexBySubString(targetEnum, shardingValue);
+                }else{
+                    //目标表的非目标主键路由-例如：根据内部用户id查询订单信息-内部用户id路由-固定取按照用户表库表数量
+                    //兼容且仅限根据外部id查询用户信息
+                    index = getTbIndexByMod(targetEnum, shardingValue);
                 }
                 break;
             }
@@ -108,5 +109,4 @@ public class SnoWalkerComplexShardingTB implements ComplexKeysShardingAlgorithm 
     public String getTbIndexBySubString(DbAndTableEnum targetEnum,String shardingValue) {
         return shardingValue.substring(targetEnum.getTbIndexBegin(), targetEnum.getTbIndexBegin() + ShardingConstant.TABLE_SUFFIX_LENGTH);
     }
-
 }

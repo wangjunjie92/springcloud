@@ -25,8 +25,8 @@ import java.util.List;
 
 
 @Slf4j
-@Configuration
-@PropertySource("classpath:application.yml")
+//@Configuration
+//@PropertySource("classpath:application.yml")
 public class DruidConfiguration {
 
     @Value("${spring.datasource.url}")

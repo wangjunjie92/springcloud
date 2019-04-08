@@ -1,8 +1,8 @@
 package com.wjj.cloud.order.server.common.id;
 
+import com.wjj.cloud.bfxy.common.util.StringUtil;
 import com.wjj.cloud.order.server.common.constants.DbAndTableEnum;
 import com.wjj.cloud.order.server.common.constants.ShardingConstant;
-import com.wjj.cloud.order.server.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-public class RedisIdUtil {
+public class RedisSequenceGenerator implements SequenceGenerator {
 
     /**序列生成器key前缀*/
     public static String LOGIC_TABLE_NAME = "orderId:redis:";
@@ -27,6 +27,7 @@ public class RedisIdUtil {
     @Autowired
     RedisTemplate redisTemplate;
 
+    @Override
     public String getOrderId(DbAndTableEnum targetEnum,int dbIndex,int tbIndex) {
         //拼接key前缀
         String redisKeySuffix = new StringBuffer(targetEnum.getTableName())

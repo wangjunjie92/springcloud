@@ -48,8 +48,8 @@ public class SnoWalkerComplexShardingDB implements ComplexKeysShardingAlgorithm 
 
             //根据列名获取索引规则，得到索引值
             String index = getIndex(listShardingValue.getLogicTableName(),
-                                    listShardingValue.getColumnName(),
-                                    shardingValue.get(0));
+                    listShardingValue.getColumnName(),
+                    shardingValue.get(0));
 
             //循环匹配数据源
             for (String name : availableTargetNames) {

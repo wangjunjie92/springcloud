@@ -6,6 +6,7 @@ import com.wjj.cloud.order.server.entity.Order;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
+import java.util.List;
 
 public interface OrderMapper {
     int deleteByPrimaryKey(String orderId);
@@ -15,6 +16,10 @@ public interface OrderMapper {
     int insertSelective(Order record);
 
     Order selectByPrimaryKey(String orderId);
+
+    List<Order> selectByUserId(String userId);
+
+    List<Order> selectByUsers(@Param("userIds")List<String> userIds);
 
     int updateByPrimaryKeySelective(Order record);
 

@@ -12,9 +12,9 @@ public enum DbAndTableEnum {
      * 例如：UD000000011902261230103345300002 共 2+6+2+15+2+5=32位
      */
 
-    T_USER("t_user", "user_id", "01", "01", "UD", 2, 2, 4, 4, 16, "用户数据表枚举"),
+    T_USER("t_user", "user_id", "01", "01", "UD", 2, 2, 4, 2, 4, "用户数据表枚举"),
 
-    T_NEW_ORDER("t_new_order", "order_id", "01", "01", "OD", 2,2, 4, 4, 8, "订单数据表枚举");
+    T_ORDER("t_order", "order_id", "01", "01", "OD", 2,2, 4, 2, 4, "订单数据表枚举");
 
     /**分片表名*/
     private String tableName;

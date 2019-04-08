@@ -26,6 +26,25 @@
     from t_order
     where order_id = #{orderId,jdbcType=VARCHAR}
   </select>
+
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from t_order
+    where user_id = #{userId,jdbcType=VARCHAR} order by create_time limit 10
+  </select>
+
+  <select id="selectByUsers" resultMap="BaseResultMap"  >
+    select
+    <include refid="Base_Column_List" />
+    from t_order
+    where user_id in
+    <foreach collection="userIds" item="userId" index="userId" open="(" close=")" separator=",">
+       #{userId,jdbcType=VARCHAR}
+    </foreach>
+    order by create_time limit 20
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from t_order
     where order_id = #{orderId,jdbcType=VARCHAR}
