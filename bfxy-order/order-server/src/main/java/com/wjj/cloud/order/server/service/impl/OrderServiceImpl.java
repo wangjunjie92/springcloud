@@ -1,7 +1,9 @@
 package com.wjj.cloud.order.server.service.impl;
 
 
+import com.wjj.cloud.order.server.common.constants.DbAndTableEnum;
 import com.wjj.cloud.order.server.common.constants.OrderStatus;
+import com.wjj.cloud.order.server.common.id.KeyGenerator;
 import com.wjj.cloud.order.server.dao.OrderMapper;
 import com.wjj.cloud.order.server.entity.Order;
 import com.wjj.cloud.order.server.service.OrderService;
@@ -13,6 +15,7 @@ import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -31,6 +34,8 @@ public class OrderServiceImpl implements OrderService {
     private ProductStoreClient productStoreClient;
     @Autowired
     private OrderlyProducer orderlyProducer;
+    @Autowired
+    private KeyGenerator keyGenerator;
 
 
     @Override
@@ -38,7 +43,8 @@ public class OrderServiceImpl implements OrderService {
         boolean flag = true;
         try {
             Order order = new Order();
-            order.setOrderId(UUID.randomUUID().toString().substring(0, 32));
+            String orderId = keyGenerator.generateKey(DbAndTableEnum.T_ORDER, userId);
+            order.setOrderId(orderId);
             order.setOrderType("1");
             order.setCityId(cityId);
             order.setPlatformId(platformId);

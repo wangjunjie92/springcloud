@@ -210,7 +210,7 @@
 		set  order_status = #{orderStatus,jdbcType=VARCHAR},
 		     update_by = #{updateBy,jdbcType=VARCHAR},
 		     update_time = #{updateTime,jdbcType=TIMESTAMP}
-		where order_id = #{orderId,jdbcType=VARCHAR}       
+		where order_id = #{orderId,jdbcType=VARCHAR} and order_status =1
    </update>  
   
 </mapper>

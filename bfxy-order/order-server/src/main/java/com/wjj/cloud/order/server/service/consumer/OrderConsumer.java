@@ -1,10 +1,12 @@
 package com.wjj.cloud.order.server.service.consumer;
 
+
 import com.wjj.cloud.order.server.common.constants.OrderStatus;
 import com.wjj.cloud.order.server.common.properties.OrderProperties;
 import com.wjj.cloud.order.server.dao.OrderMapper;
 import com.wjj.cloud.order.server.service.OrderService;
 import com.wjj.cloud.order.server.util.GsonUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
@@ -16,7 +18,6 @@ import org.apache.rocketmq.common.message.MessageExt;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import java.util.Map;
  */
 
 @Component
+@Slf4j
 public class OrderConsumer implements InitializingBean {
 
     @Autowired
@@ -57,9 +59,10 @@ public class OrderConsumer implements InitializingBean {
         @Override
         public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
             MessageExt msg = msgs.get(0);
+            String msgBody="";
             try {
                 String topic = msg.getTopic();
-                String msgBody = new String(msg.getBody(), "utf-8");
+                msgBody = new String(msg.getBody(), "utf-8");
                 String tags = msg.getTags();
                 String keys = msg.getKeys();
                 System.err.println("收到消息：" + "  topic :" + topic + "  ,tags : " + tags + "keys :" + keys + ", msg : " + msgBody);
@@ -83,6 +86,10 @@ public class OrderConsumer implements InitializingBean {
                 }
             }catch (Exception e) {
                 e.printStackTrace();
+                if (msg.getReconsumeTimes()==3) {
+                    log.error("OrderConsumer消费失败，内容：{}",msgBody);
+                    return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+                }
                 return ConsumeConcurrentlyStatus.RECONSUME_LATER;
             }
             return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
