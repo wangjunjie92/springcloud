@@ -4,7 +4,7 @@ spring:
   datasource:
     name: tjtt
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.0.10:3306/bfxy?allowMultiQueries=true&useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://192.168.0.4:3306/bfxy?allowMultiQueries=true&useUnicode=true&characterEncoding=utf8
     username: root
     password: w921211d
     maxActive: 20
@@ -28,7 +28,10 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka:8761/eureka/
+      defaultZone: http://192.168.0.103:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
 
 # 分页配置
 pagehelper:
