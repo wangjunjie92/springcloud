@@ -36,4 +36,10 @@ public class TestController {
     }
 
 
+    @GetMapping("/test3")
+    public String test3(String pid) throws InterruptedException {
+        return "success:......pid:"+pid;
+    }
+
+
 }

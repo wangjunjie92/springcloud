@@ -23,6 +23,7 @@ spring:
           uri: lb://order
           predicates:
             - Path=/api/order/**
+            - TimeBetween=下午6:00,下午11:59
           filters:
             - StripPrefix=2
             - name: Hystrix
@@ -61,6 +62,9 @@ hystrix:
 eureka:
   client:
     service-url:
-     defaultZone: http://eureka:8761/eureka/
+     defaultZone: http://192.168.0.102:8761/eureka/
   instance:
       prefer-ip-address: true
+logging:
+  level:
+    org.springframework.cloud.gateway: trace

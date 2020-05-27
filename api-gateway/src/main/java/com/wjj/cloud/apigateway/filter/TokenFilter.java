@@ -31,6 +31,7 @@ import java.util.Map;
 public class TokenFilter implements GlobalFilter,Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+
         ServerHttpRequest request = exchange.getRequest();
         String token = request.getHeaders().getFirst("token");
         if (StringUtils.isNotBlank(token) && "token".equals(token)) {
